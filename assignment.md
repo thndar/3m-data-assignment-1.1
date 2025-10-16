@@ -16,7 +16,33 @@ Each entity has the following attributes:
 
 Answer:
 
-```dbml
+```
+Table User {
+  id int [pk, increment]
+  username varchar
+  email varchar
+  created_at datetime
+}
+
+Table Post {
+  id int [pk, increment]
+  title varchar
+  body text
+  user_id int [ref: > User.id]
+  status varchar
+  created_at datetime
+}
+
+Table Follows {
+  following_user_id int [ref: > User.id]
+  followed_user_id int [ref: > User.id]
+  created_at datetime
+}
+
+Ref: User.id < Post.user_id        // A user can have many posts
+Ref: User.id < Follows.following_user_id  // A user can follow others
+Ref: User.id < Follows.followed_user_id   // A user can be followed by others
+
 
 ```
 ### Question 2
@@ -25,7 +51,8 @@ Using the data provided in lession 1.3 ( https://github.com/su-ntu-ctp/5m-data-1
 
 Answer:
 
-```sql
+```
+ALTER TABLE lesson.teachers ADD COLUMN subject_of_type VARCHAR;
 
 ```
 
@@ -35,7 +62,10 @@ Using the data provided in lession 1.3 ( https://github.com/su-ntu-ctp/5m-data-1
 
 Answer:
 
-```sql
+```
+UPDATE lesson1.teachers
+SET email = 'john.doe@school.com'
+WHERE id = 1;
 
 ```
 ### Question 4
@@ -47,7 +77,17 @@ Using the data provided in lesson 1.4 ( https://github.com/su-ntu-ctp/5m-data-1.
 - Above $700,000: 'Premium'
   Show the counts in descending order.
 
-```sql
+```
+SELECT rfp.resale_price,
+CASE 
+    WHEN rfp.resale_price < 400000 THEN 'Budget' 
+    WHEN rfp.resale_price BETWEEN 400000 AND 700000 THEN 'Mid-Range' 
+    WHEN rfp.resale_price > 700000 THEN 'Premium'
+    ELSE 'Low' 
+  END AS price_level,
+  COUNT(rfp.flat_type) AS flat_type_count
+FROM resale_flat_prices_2017 rfp
+GROUP BY rfp.resale_price;
 
 ```
 
@@ -55,7 +95,22 @@ Using the data provided in lesson 1.4 ( https://github.com/su-ntu-ctp/5m-data-1.
 
 Using the data provided in lesson 1.4 ( https://github.com/su-ntu-ctp/5m-data-1.4-sql-basic-dml/tree/main/db ),select the minimum and maximum price of flats sold in each town during the first quarter of 2017 (January to March).
 
-```sql
+```
+SELECT rfp.town, MIN(rfp.resale_price), MAX(rfp.resale_price)
+FROM resale_flat_prices_2017 rfp
+WHERE rfp.month BETWEEN '2017-01' AND '2017-03'
+GROUP BY rfp.town;
+
+```
+SELECT 
+  rfp.town, 
+  rfp.month, 
+  MIN(rfp.resale_price) AS min_price, 
+  MAX(rfp.resale_price) AS max_price
+FROM resale_flat_prices_2017 rfp
+WHERE rfp.month BETWEEN '2017-01' AND '2017-03'
+GROUP BY rfp.town, rfp.month
+ORDER BY rfp.town, rfp.month;
 
 ```
 ### Question 6
