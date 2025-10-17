@@ -19,28 +19,33 @@ How can game developers and publishers optimize their strategy to maximize globa
 Which genres contribute the most to global sales?
 
 SQL:
-```sql
+```
+SELECT vgs.Genre, SUM(vgs.Global_Sales) AS total_sales  
+FROM main.vgsales vgs
+GROUP BY vgs.Genre
+ORDER BY total_sales DESC;
 
 ```
 Findings:
-```findings
-
+```
+select Platform, sum(global_sales) from vgsales group by platform order by sum(global_sales) desc;
 ```
 Which platforms generate the highest global sales?
 
 SQL:
-```sql
+```
+
 
 ```
 Findings:
-```findings
+```
 
 ```
 Which publishers are the most successful in terms of global sales?
 
 SQL:
-```sql
-
+```
+select Publisher, sum(global_sales) from vgsales group by Publisher order by sum(global_sales) desc;
 ```
 Findings:
 ```findings
@@ -49,7 +54,11 @@ Findings:
 How does success vary across regions (North America, Europe, Japan, Others)?
 
 SQL:
-```sql
+```select  
+Round(sum(NA_Sales),2) as NA_Sales_Sum, 
+Round(sum(EU_Sales),2) as EU_Sales_Sum, 
+Round(sum(JP_Sales),2) as JP_Sales_Sum, 
+Round(sum(Other_Sales),2) as Other_Sales_Sum from vgsales;
 
 ```
 Findings:
@@ -59,7 +68,12 @@ Findings:
 What are the trends over time in game sales by genre and platform?
 
 SQL:
-```sql
+```
+select genre, platform, year, 
+sum(NA_Sales) as NA_Sales_Sum, sum(EU_Sales) as EU_Sales_Sum, sum(JP_Sales) as JP_Sales_Sum, sum(Other_Sales) as Other_Sales_Sum , sum(Global_Sales) as Global_Sales_Sum 
+from vgsales 
+group by genre, platform, year
+order by   genre, platform, yea
 
 ```
 Findings:
@@ -69,7 +83,19 @@ Findings:
 Which platforms are most successful for specific genres?
 
 SQL:
-```sql
+```
+SELECT genre, platform, total_sales
+FROM (
+  SELECT 
+    genre,
+    platform,
+    SUM(global_sales) AS total_sales,
+    RANK() OVER (PARTITION BY genre ORDER BY SUM(global_sales) DESC) AS rnk
+  FROM vgsales
+  GROUP BY genre, platform
+) AS ranked
+WHERE rnk = 1
+ORDER BY genre;
 
 ```
 Findings:
