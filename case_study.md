@@ -28,13 +28,13 @@ ORDER BY total_sales DESC;
 ```
 Findings:
 ```
-select Platform, sum(global_sales) from vgsales group by platform order by sum(global_sales) desc;
+
 ```
 Which platforms generate the highest global sales?
 
 SQL:
 ```
-
+select Platform, sum(global_sales) from vgsales group by platform order by sum(global_sales) desc;
 
 ```
 Findings:
