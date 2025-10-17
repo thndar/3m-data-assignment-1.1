@@ -54,11 +54,13 @@ Findings:
 How does success vary across regions (North America, Europe, Japan, Others)?
 
 SQL:
-```select  
+```
+select  
 Round(sum(NA_Sales),2) as NA_Sales_Sum, 
 Round(sum(EU_Sales),2) as EU_Sales_Sum, 
 Round(sum(JP_Sales),2) as JP_Sales_Sum, 
-Round(sum(Other_Sales),2) as Other_Sales_Sum from vgsales;
+Round(sum(Other_Sales),2) as Other_Sales_Sum 
+from vgsales;
 
 ```
 Findings:
