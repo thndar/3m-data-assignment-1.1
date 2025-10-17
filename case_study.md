@@ -75,8 +75,7 @@ select genre, platform, year,
 sum(NA_Sales) as NA_Sales_Sum, sum(EU_Sales) as EU_Sales_Sum, sum(JP_Sales) as JP_Sales_Sum, sum(Other_Sales) as Other_Sales_Sum , sum(Global_Sales) as Global_Sales_Sum 
 from vgsales 
 group by genre, platform, year
-order by   genre, platform, yea
-
+order by   genre, platform, year;
 ```
 Findings:
 ```findings
